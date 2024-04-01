@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Task</title>
+    <link type="text/css" rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post" enctype="multipart/form-data" class="form">
+
+    <div class="form-input">
+        <label>Добавьте файл с информацией об отделениях</label>
+        <input type="file" name="file_department" required>
+    </div>
+
+    <div class="form-input">
+        <label>Добавьте файл с информацией об сотрудниках</label>
+        <input type="file" name="file_users" required>
+    </div>
+
+    <button type="submit">
+        Загрузить
+    </button>
+</form>
+
+<?php
+    if($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+    $file_1 = $_FILES['file_department'];
+    $file_2 = $_FILES['file_users'];
+    $tempFilePath_1 = $file_1['tmp_name']; // временный путь к файлу
+    $tempFilePath_2 = $file_2['tmp_name'];
+    $targetFilePath_1 = 'C:/OSPanel/domains/test/' . $file_1['name']; // целевой путь для сохранения файла
+    $targetFilePath_2 = 'C:/OSPanel/domains/test/' . $file_2['name'];
+
+    move_uploaded_file($tempFilePath_1, $targetFilePath_1); // загружаем файл
+    move_uploaded_file($tempFilePath_2, $targetFilePath_2);
+
+    require_once 'print_file_info.php'; // подключение всех необходимых скриптов
+    require_once 'db_connection.php';
+
+
+    require_once 'print_data_from_db.php';
+    require_once 'create_file.php';
+
+}
+?>
+
+</body>
+</html>
